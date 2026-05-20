@@ -79,7 +79,7 @@ export default function FindFreeView({ onProve }) {
   const [showCreate, setShowCreate] = useState(false)
   const [createName, setCreateName] = useState('')
   const [submitted, setSubmitted] = useState(false)
-  const [availData, setAvailData] = useState(null)
+  const [availData, setAvailData] = useState(MOCK_AVAILABILITY['team-standup'])
   const [showFullDay, setShowFullDay] = useState(false)
   const [threshold, setThreshold] = useState(1)
   const [proofExpiry, setProofExpiry] = useState(null)
@@ -115,14 +115,16 @@ export default function FindFreeView({ onProve }) {
   function handleJoinGroup(groupId) {
     if (!joinedGroups.includes(groupId)) setJoinedGroups([...joinedGroups, groupId])
     setActiveGroup(groupId)
-    setSubmitted(false); setAvailData(null); setShowJoin(false)
+    setSubmitted(false)
+    setAvailData(MOCK_AVAILABILITY[groupId] || HOURS_FULL.map(() => Math.floor(Math.random() * 5)))
+    setShowJoin(false)
   }
 
   function handleLeaveGroup(groupId) {
     if (groupId === activeGroup) {
       const remaining = joinedGroups.filter(g => g !== groupId)
       setActiveGroup(remaining[0] || '')
-      setAvailData(null); setSubmitted(false)
+      setAvailData(remaining.length > 0 ? (MOCK_AVAILABILITY[remaining[0]] || HOURS_FULL.map(() => Math.floor(Math.random() * 5))) : null); setSubmitted(false)
     }
     setJoinedGroups(joinedGroups.filter(g => g !== groupId))
   }
@@ -133,7 +135,8 @@ export default function FindFreeView({ onProve }) {
     const newGroup = { id, name: createName.trim(), members: 1, submitted: 1, yourRole: 'admin' }
     setCustomGroups([...customGroups, newGroup])
     setJoinedGroups([...joinedGroups, id])
-    setActiveGroup(id); setCreateName(''); setShowCreate(false); setShowJoin(false); setSubmitted(false); setAvailData(null)
+    setActiveGroup(id); setCreateName(''); setShowCreate(false); setShowJoin(false); setSubmitted(false)
+    setAvailData(MOCK_AVAILABILITY[id] || HOURS_FULL.map(() => Math.floor(Math.random() * (newGroup?.members || 3))))
   }
 
   function handleBook(hour, count) {
@@ -230,7 +233,7 @@ export default function FindFreeView({ onProve }) {
                   const isActive = gid === activeGroup
                   return (
                     <div key={gid}
-                      onClick={() => { setActiveGroup(gid); setSubmitted(false); setAvailData(null) }}
+                      onClick={() => { setActiveGroup(gid); setSubmitted(false); setAvailData(MOCK_AVAILABILITY[gid] || HOURS_FULL.map(() => Math.floor(Math.random() * 5))) }}
                       className={`flex items-center justify-between py-2.5 px-3 rounded-lg cursor-pointer transition ${
                         isActive ? 'bg-em-500/10 border border-em-500/20' : 'bg-dark-700/30 border border-transparent hover:bg-dark-600/30'
                       }`}>
@@ -303,44 +306,17 @@ export default function FindFreeView({ onProve }) {
               )}
             </div>
 
-            {/* Sync status */}
+            {/* Proof status — compact */}
             {activeGroup && !submitted && (
-              <div className="glass rounded-xl p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <ShieldIcon className="w-5 h-5 text-em-400" />
-                  <h3 className="text-sm font-semibold text-white">Availability Sync</h3>
-                  <div className="ml-auto flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-em-500 animate-pulse" />
-                    <span className="text-[10px] text-em-400">Syncing</span>
-                  </div>
-                </div>
-                <p className="text-xs text-gray-400 mb-4">
-                  Your calendar is being processed locally. A ZK proof of free/busy state is generated and shared with the group — no event details ever leave your device.
-                </p>
-                <div className="bg-dark-700/50 rounded-lg p-3 mb-3">
-                  <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-2">Your calendar (local only) · <TZLabel tz={tz} /></div>
-                  <div className="flex gap-px">
-                    {hours.map(h => {
-                      const isBusy = YOUR_BUSY.includes(h)
-                      return (
-                        <div key={h} className="flex-1 flex flex-col items-center gap-0.5">
-                          <div className={`w-full h-6 rounded-sm ${isBusy ? 'bg-dark-500' : 'bg-em-500/20'}`}
-                            title={`${fmtHour(h)}: ${isBusy ? 'Busy' : 'Free'}`} />
-                          {h % 2 === 0 && <span className="text-[7px] mono text-gray-600">{h}</span>}
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <div className="flex items-center gap-3 mt-2">
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm bg-em-500/20" /><span className="text-[8px] text-gray-500">Free</span></div>
-                    <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-sm bg-dark-500" /><span className="text-[8px] text-gray-500">Busy</span></div>
-                  </div>
+              <div className="flex items-center justify-between bg-dark-700/50 rounded-lg px-4 py-2.5">
+                <div className="flex items-center gap-2">
+                  <ShieldIcon className="w-4 h-4 text-gray-500" />
+                  <span className="text-xs text-gray-400">Availability not synced yet</span>
                 </div>
                 <button onClick={handleSubmitAvailability}
-                  className="w-full bg-em-600 hover:bg-em-500 transition text-white text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2">
-                  <ShieldIcon className="w-4 h-4" /> Sync now
+                  className="text-xs text-em-400 hover:text-em-300 bg-em-500/10 px-3 py-1 rounded-lg transition flex items-center gap-1.5">
+                  <ShieldIcon className="w-3.5 h-3.5" /> Sync
                 </button>
-                <div className="text-[10px] text-gray-600 text-center mt-2">Proof auto-renews every {PROOF_EXPIRY_HOURS}h</div>
               </div>
             )}
 
@@ -351,7 +327,7 @@ export default function FindFreeView({ onProve }) {
                   <div className="w-2 h-2 rounded-full bg-em-500 animate-pulse" />
                   <span className="text-xs text-em-400 font-medium">Proof submitted</span>
                 </div>
-                  <button onClick={() => { setSubmitted(false); setAvailData(null); setProofExpiry(null) }}
+                  <button onClick={() => { setSubmitted(false); setAvailData(MOCK_AVAILABILITY[activeGroup] || HOURS_FULL.map(() => Math.floor(Math.random() * (group?.members || 3)))); setProofExpiry(null) }}
                     className="text-[10px] text-gray-500 hover:text-white transition">
                     Re-sync
                 </button>
@@ -478,7 +454,7 @@ export default function FindFreeView({ onProve }) {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-white">Best Slots</h3>
                 <span className="text-[10px] mono text-gray-500">
-                  {availData ? (threshold > 1 ? `≥${threshold} members` : 'All free') : 'Submit first'}
+                  {availData ? (threshold > 1 ? `≥${threshold} members` : 'All free') : '—'}
                 </span>
               </div>
 
