@@ -2,20 +2,21 @@ export default function Nav({ onVerify }) {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 glass border-b border-dark-600/50">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-7 h-7 rounded-lg bg-em-500/20 flex items-center justify-center">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-7 h-7 rounded-lg bg-em-500/20 flex items-center justify-center shrink-0">
             <LockIcon className="w-4 h-4 text-em-400" />
           </div>
           <span className="font-semibold text-white tracking-tight">zk-calendar</span>
-          <span className="text-[10px] mono bg-em-500/15 text-em-400 px-1.5 py-0.5 rounded">v0.3</span>
+          <span className="text-[10px] mono bg-em-500/15 text-em-400 px-1.5 py-0.5 rounded hidden sm:inline">v0.3</span>
         </div>
-        <div className="flex items-center gap-3">
-          <button onClick={onVerify} className="text-xs text-gray-400 hover:text-white transition px-2 py-1 rounded hover:bg-dark-600">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button onClick={onVerify} className="text-xs text-gray-400 hover:text-white transition px-2 py-1 rounded hover:bg-dark-600 hidden sm:inline-flex">
             Verify Proof
           </button>
-          <button className="flex items-center gap-2 bg-em-600 hover:bg-em-500 transition text-white text-sm font-medium px-4 py-1.5 rounded-lg">
+          <button className="flex items-center gap-1.5 sm:gap-2 bg-em-600 hover:bg-em-500 transition text-white text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 rounded-lg">
             <BoltIcon className="w-3.5 h-3.5" />
-            Connect Wallet
+            <span className="hidden sm:inline">Connect Wallet</span>
+            <span className="sm:hidden">Connect</span>
           </button>
         </div>
       </div>
