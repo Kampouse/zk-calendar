@@ -1,0 +1,11 @@
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/outlayer-22db8226825c1ac3.d: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/storage.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/env.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/world.wit /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/deps/storage.wit
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/liboutlayer-22db8226825c1ac3.rlib: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/storage.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/env.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/world.wit /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/deps/storage.wit
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/liboutlayer-22db8226825c1ac3.rmeta: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/storage.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/env.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/world.wit /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/deps/storage.wit
+
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/lib.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/storage.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/src/env.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/world.wit:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/outlayer-0.1.1/wit/deps/storage.wit:

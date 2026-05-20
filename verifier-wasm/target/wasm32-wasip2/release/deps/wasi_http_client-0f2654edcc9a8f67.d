@@ -1,0 +1,10 @@
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/wasi_http_client-0f2654edcc9a8f67.d: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/client.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/request.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/response.rs
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/libwasi_http_client-0f2654edcc9a8f67.rlib: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/client.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/request.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/response.rs
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/libwasi_http_client-0f2654edcc9a8f67.rmeta: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/client.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/request.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/response.rs
+
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/lib.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/client.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/request.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasi-http-client-0.2.1/src/response.rs:

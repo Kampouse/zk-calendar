@@ -1,0 +1,14 @@
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/serde-45b0641233ddcad5.d: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/build/serde-5de368af362998b3/out/private.rs
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/libserde-45b0641233ddcad5.rlib: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/build/serde-5de368af362998b3/out/private.rs
+
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/deps/libserde-45b0641233ddcad5.rmeta: /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/build/serde-5de368af362998b3/out/private.rs
+
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/asil/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/build/serde-5de368af362998b3/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/asil/.openclaw/workspace/zk-calendar/verifier-wasm/target/wasm32-wasip2/release/build/serde-5de368af362998b3/out
