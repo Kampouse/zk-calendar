@@ -332,19 +332,18 @@ export default function FindFreeView({ onProve }) {
                   {hours.map(h => {
                     const count = availData[h] || 0
                     const isYourBusy = YOUR_BUSY.includes(h)
-                    const intensity = maxAvail > 0 ? count / maxAvail : 0
                     const meetsThreshold = count >= threshold
-                    const pct = Math.round(intensity * 100)
+                    const pct = maxAvail > 0 ? Math.round((count / maxAvail) * 100) : 0
+                    const { bg, glow } = heatmapColor(count, totalMembers)
                     return (
                       <div key={h} className="flex-1 flex flex-col items-center gap-0.5 group/slot relative">
                         <div className={`w-full cursor-pointer rounded-sm transition-all hover:scale-y-110 ${
                           isYourBusy ? 'opacity-40' : ''
-                        } ${!meetsThreshold && !isYourBusy ? 'opacity-30' : ''}`}
+                        }`}
                           style={{
                             height: `${20 + pct * 0.8}px`,
-                            background: meetsThreshold
-                              ? `linear-gradient(to top, rgba(16,185,129,${0.15 + intensity * 0.55}), rgba(16,185,129,${intensity * 0.85}))`
-                              : `linear-gradient(to top, rgba(46,52,72,${0.3 + intensity * 0.3}), rgba(46,52,72,${0.3 + intensity * 0.3}))`,
+                            background: bg,
+                            boxShadow: glow,
                           }}
                           onClick={() => handleSlotClick(h)}
                         >
@@ -363,12 +362,15 @@ export default function FindFreeView({ onProve }) {
                 </div>
                 <div className="flex items-center justify-between mt-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-2 rounded-sm" style={{background: 'linear-gradient(to right, rgba(16,185,129,0.15), rgba(16,185,129,0.8))'}} />
-                      <span className="text-[8px] text-gray-500">Few → Many free</span>
+                    <div className="flex items-center gap-0.5">
+                      {[0, 0.25, 0.5, 0.75, 1].map((f, i) => {
+                        const { bg } = heatmapColor(Math.round(f * totalMembers), totalMembers)
+                        return <div key={i} className="w-3 h-2 rounded-sm" style={{ background: bg }} />
+                      })}
+                      <span className="text-[8px] text-gray-500 ml-1.5">Few → Many free</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-2 rounded-sm bg-dark-600 opacity-30" style={{opacity: 0.5}} />
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-2 rounded-sm bg-slate-700/40" />
                       <span className="text-[8px] text-gray-500">Below threshold</span>
                     </div>
                   </div>
@@ -407,29 +409,29 @@ export default function FindFreeView({ onProve }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {getBestSlots(availData, YOUR_BUSY, totalMembers, threshold).map((slot, i) => (
+                {getBestSlots(availData, YOUR_BUSY, totalMembers, threshold).map((slot, i) => {
+                    const colors = countColor(slot.count, totalMembers)
+                    return (
                   <div key={i}
                     className={`rounded-lg p-3 transition slide-up ${
                       slot.yourBusy
                         ? 'bg-dark-700/30 border border-dark-500/30 opacity-60 cursor-default'
-                        : 'bg-em-500/8 border border-em-500/15 hover:bg-em-500/12 cursor-pointer'
+                        : `${colors.bg} border border-dark-500/20 hover:border-dark-500/40 cursor-pointer`
                     }`}
                     onClick={() => !slot.yourBusy && handleSlotClick(slot.hour)}>
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className={`text-sm font-medium ${slot.yourBusy ? 'text-gray-500 line-through' : 'text-em-400'}`}>
+                        <div className={`text-sm font-medium ${slot.yourBusy ? 'text-gray-500 line-through' : colors.text}`}>
                           {fmtHour12(slot.hour)}
                         </div>
                         <div className="flex items-center gap-2 mt-0.5">
                           <div className="flex -space-x-0.5">
                             {Array.from({ length: Math.min(slot.count, 6) }).map((_, j) => (
-                              <div key={j} className={`w-3.5 h-3.5 rounded-full border-2 border-dark-900 ${
-                                slot.meetsThreshold ? 'bg-em-500' : 'bg-dark-500'
-                              }`} />
+                              <div key={j} className={`w-3.5 h-3.5 rounded-full border-2 border-dark-900 ${dotColor(slot.count, totalMembers)}`} />
                             ))}
                             {slot.count > 6 && <span className="text-[8px] mono text-gray-500 ml-0.5">+{slot.count - 6}</span>}
                           </div>
-                          <span className={`text-[10px] mono ${slot.meetsThreshold ? 'text-em-400' : 'text-gray-500'}`}>
+                          <span className={`text-[10px] mono ${colors.text}`}>
                             {slot.count}/{totalMembers} free
                           </span>
                         </div>
@@ -437,19 +439,17 @@ export default function FindFreeView({ onProve }) {
                       <div className="flex items-center gap-1.5">
                         {slot.yourBusy && <span className="text-[9px] mono text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded">YOUR BUSY</span>}
                         {!slot.yourBusy && slot.meetsThreshold && slot.count === maxAvail && (
-                          <span className="text-[9px] mono text-em-400 bg-em-500/10 px-1.5 py-0.5 rounded">★ BEST</span>
+                          <span className={`text-[9px] mono ${colors.text} ${colors.bg} px-1.5 py-0.5 rounded`}>★ BEST</span>
                         )}
                         {!slot.yourBusy && slot.meetsThreshold && <ChevronRight />}
                       </div>
                     </div>
                     {/* Mini bar */}
                     <div className="mt-2 h-1 rounded-full bg-dark-600 overflow-hidden">
-                      <div className={`h-full rounded-full transition-all ${
-                        slot.meetsThreshold ? 'bg-em-500/50' : 'bg-dark-500/50'
-                      }`} style={{ width: `${(slot.count / totalMembers) * 100}%` }} />
+                      <div className={`h-full rounded-full transition-all ${barColor(slot.count, totalMembers)}`} style={{ width: `${(slot.count / totalMembers) * 100}%` }} />
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             )}
           </div>
@@ -505,4 +505,43 @@ function LockIcon({ className }) {
 
 function ChevronRight() {
   return <svg className="w-3.5 h-3.5 text-em-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+}
+
+// Color scale based on how many members are available
+// 0: empty slate, 1-2: dim blue, 3-4: teal, 5-6: emerald, 7+: bright amber/gold
+function heatmapColor(count, totalMembers) {
+  const fraction = totalMembers > 0 ? count / totalMembers : 0
+  if (count === 0) return { bg: 'rgba(30,41,59,0.4)', glow: 'none' }
+  if (fraction <= 0.25) return { bg: `rgba(99,102,241,${0.35 + fraction * 0.4})`, glow: 'none' }        // indigo/blue — sparse
+  if (fraction <= 0.5)  return { bg: `rgba(20,184,166,${0.4 + fraction * 0.4})`, glow: 'none' }         // teal — moderate
+  if (fraction <= 0.75) return { bg: `rgba(16,185,129,${0.45 + fraction * 0.45})`, glow: 'none' }      // emerald — good
+  return { bg: `rgba(234,179,8,${0.5 + fraction * 0.4})`, glow: `0 0 8px rgba(234,179,8,${fraction * 0.3})` }  // amber/gold — everyone
+}
+
+// Dot color for member count in Best Slots
+function dotColor(count, totalMembers) {
+  const fraction = totalMembers > 0 ? count / totalMembers : 0
+  if (count === 0) return 'bg-dark-600'
+  if (fraction <= 0.25) return 'bg-indigo-400'       // sparse — blue
+  if (fraction <= 0.5)  return 'bg-teal-400'          // moderate — teal
+  if (fraction <= 0.75) return 'bg-emerald-500'       // good — green
+  return 'bg-amber-400'                                // near-unanimous — gold
+}
+
+// Text + accent color for count label
+function countColor(count, totalMembers) {
+  const fraction = totalMembers > 0 ? count / totalMembers : 0
+  if (fraction <= 0.25) return { text: 'text-indigo-400', bg: 'bg-indigo-400/10' }
+  if (fraction <= 0.5)  return { text: 'text-teal-400',    bg: 'bg-teal-400/10' }
+  if (fraction <= 0.75) return { text: 'text-emerald-400', bg: 'bg-emerald-400/10' }
+  return                          { text: 'text-amber-400',  bg: 'bg-amber-400/10' }
+}
+
+// Progress bar color
+function barColor(count, totalMembers) {
+  const fraction = totalMembers > 0 ? count / totalMembers : 0
+  if (fraction <= 0.25) return 'bg-indigo-500/50'
+  if (fraction <= 0.5)  return 'bg-teal-500/50'
+  if (fraction <= 0.75) return 'bg-emerald-500/50'
+  return 'bg-amber-500/50'
 }
