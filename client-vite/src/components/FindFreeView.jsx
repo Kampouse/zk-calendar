@@ -29,35 +29,36 @@ function getTimezone() {
 function fmtHour(h) { return h < 12 ? `${h}am` : h === 12 ? '12pm' : `${h-12}pm` }
 function fmtHour12(h) { return h < 12 ? `${h}:00 AM` : h === 12 ? '12:00 PM' : `${h-12}:00 PM` }
 
+// Color language: green = good (many free), orange/red = bad (few free)
 function heatmapColor(count, totalMembers) {
   const f = totalMembers > 0 ? count / totalMembers : 0
   if (count === 0) return { bg: 'rgba(30,41,59,0.4)', glow: 'none' }
-  if (f <= 0.25) return { bg: `rgba(99,102,241,${0.35 + f * 0.4})`, glow: 'none' }
-  if (f <= 0.5)  return { bg: `rgba(20,184,166,${0.4 + f * 0.4})`, glow: 'none' }
-  if (f <= 0.75) return { bg: `rgba(16,185,129,${0.45 + f * 0.45})`, glow: 'none' }
-  return { bg: `rgba(234,179,8,${0.5 + f * 0.4})`, glow: `0 0 8px rgba(234,179,8,${f * 0.3})` }
+  if (f <= 0.25) return { bg: `rgba(239,68,68,${0.3 + f * 0.5})`, glow: 'none' }       // red — sparse
+  if (f <= 0.5)  return { bg: `rgba(249,115,22,${0.35 + f * 0.4})`, glow: 'none' }    // orange — so-so
+  if (f <= 0.75) return { bg: `rgba(34,197,94,${0.35 + f * 0.4})`, glow: 'none' }      // green — good
+  return { bg: `rgba(16,185,129,${0.5 + f * 0.4})`, glow: `0 0 8px rgba(16,185,129,${f * 0.3})` } // bright emerald — best
 }
 function dotColor(count, totalMembers) {
   const f = totalMembers > 0 ? count / totalMembers : 0
   if (count === 0) return 'bg-dark-600'
-  if (f <= 0.25) return 'bg-indigo-400'
-  if (f <= 0.5)  return 'bg-teal-400'
-  if (f <= 0.75) return 'bg-emerald-500'
-  return 'bg-amber-400'
+  if (f <= 0.25) return 'bg-red-400'
+  if (f <= 0.5)  return 'bg-orange-400'
+  if (f <= 0.75) return 'bg-green-500'
+  return 'bg-emerald-400'
 }
 function countColor(count, totalMembers) {
   const f = totalMembers > 0 ? count / totalMembers : 0
-  if (f <= 0.25) return { text: 'text-indigo-400', bg: 'bg-indigo-400/10' }
-  if (f <= 0.5)  return { text: 'text-teal-400',    bg: 'bg-teal-400/10' }
-  if (f <= 0.75) return { text: 'text-emerald-400',  bg: 'bg-emerald-400/10' }
-  return                     { text: 'text-amber-400',   bg: 'bg-amber-400/10' }
+  if (f <= 0.25) return { text: 'text-red-400',    bg: 'bg-red-400/10',    btn: 'bg-red-600 hover:bg-red-500' }
+  if (f <= 0.5)  return { text: 'text-orange-400', bg: 'bg-orange-400/10', btn: 'bg-orange-600 hover:bg-orange-500' }
+  if (f <= 0.75) return { text: 'text-green-400',   bg: 'bg-green-400/10',  btn: 'bg-green-600 hover:bg-green-500' }
+  return                     { text: 'text-emerald-400', bg: 'bg-emerald-400/10', btn: 'bg-emerald-600 hover:bg-emerald-500' }
 }
 function barColor(count, totalMembers) {
   const f = totalMembers > 0 ? count / totalMembers : 0
-  if (f <= 0.25) return 'bg-indigo-500/50'
-  if (f <= 0.5)  return 'bg-teal-500/50'
-  if (f <= 0.75) return 'bg-emerald-500/50'
-  return 'bg-amber-500/50'
+  if (f <= 0.25) return 'bg-red-500/50'
+  if (f <= 0.5)  return 'bg-orange-500/50'
+  if (f <= 0.75) return 'bg-green-500/50'
+  return 'bg-emerald-500/50'
 }
 function getBestSlots(availData, yourBusy, totalMembers, threshold) {
   return availData
@@ -435,19 +436,25 @@ export default function FindFreeView({ onProve }) {
                     })}
                   </div>
                   <div className="flex items-center justify-between mt-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-0.5">
-                        {[0, 0.25, 0.5, 0.75, 1].map((f, i) => {
-                          const { bg } = heatmapColor(Math.round(f * totalMembers), totalMembers)
-                          return <div key={i} className="w-3 h-2 rounded-sm" style={{ background: bg }} />
-                        })}
-                        <span className="text-[8px] text-gray-500 ml-1.5">Few → Many free</span>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-0.5">
+                          {[0, 0.25, 0.5, 0.75, 1].map((f, i) => {
+                            const { bg } = heatmapColor(Math.round(f * totalMembers), totalMembers)
+                            return <div key={i} className="w-3 h-2 rounded-sm" style={{ background: bg }} />
+                          })}
+                          <span className="text-[8px] text-gray-500 ml-1.5">Few → Many free</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-3 h-2 rounded-sm bg-slate-700/40" />
+                          <span className="text-[8px] text-gray-500">Below threshold</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-3 h-2 rounded-sm" style={{ background: 'rgba(239,68,68,0.5)' }} />
+                          <span className="text-[8px] text-red-400">Sparse</span>
+                          <div className="w-3 h-2 rounded-sm" style={{ background: 'rgba(34,197,94,0.5)' }} />
+                          <span className="text-[8px] text-green-400">Many</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-3 h-2 rounded-sm bg-slate-700/40" />
-                        <span className="text-[8px] text-gray-500">Below threshold</span>
-                      </div>
-                    </div>
                     <span className="text-[8px] text-gray-500">You don't see who — only how many</span>
                   </div>
                 </div>
@@ -518,7 +525,7 @@ export default function FindFreeView({ onProve }) {
                             )}
                             {!slot.yourBusy && slot.meetsThreshold && (
                               <button onClick={(e) => { e.stopPropagation(); handleBook(slot.hour, slot.count) }}
-                                className="text-[9px] font-medium text-white bg-em-600 hover:bg-em-500 px-2 py-0.5 rounded transition flex items-center gap-1">
+                                className={`text-[9px] font-medium text-white ${colors.btn} px-2 py-0.5 rounded transition flex items-center gap-1`}>
                                 <CalendarIcon className="w-3 h-3" /> Book
                               </button>
                             )}
