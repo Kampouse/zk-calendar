@@ -466,8 +466,8 @@ export default function FindFreeView({ onProve }) {
                     const colors = countColor(slot.count, totalMembers)
                     return (
                       <div key={i}
-                        className={`rounded-lg p-3 transition ${colors.bg} border border-dark-500/20 hover:border-dark-500/40 cursor-pointer`}
-                        onClick={() => handleSlotClick(slot.hour)}>
+                        className={`rounded-lg p-3 transition ${colors.bg} border border-dark-500/20 hover:border-em-500/30 hover:bg-dark-700/50 cursor-pointer`}
+                        onClick={() => handleBook(slot.hour, slot.count)}>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className={`text-sm font-medium ${colors.text}`}>
@@ -489,10 +489,6 @@ export default function FindFreeView({ onProve }) {
                             {slot.count === maxAvail && (
                               <span className={`text-[9px] mono ${colors.text} ${colors.bg} px-1.5 py-0.5 rounded`}>★ BEST</span>
                             )}
-                            <button onClick={(e) => { e.stopPropagation(); handleBook(slot.hour, slot.count) }}
-                              className={`text-[9px] font-medium text-white ${colors.btn} px-2 py-0.5 rounded transition flex items-center gap-1`}>
-                              <CalendarIcon className="w-3 h-3" /> Book
-                            </button>
                           </div>
                         </div>
                         <div className="mt-2 h-1 rounded-full bg-dark-600 overflow-hidden">
