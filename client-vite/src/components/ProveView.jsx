@@ -102,7 +102,14 @@ export default function ProveView({ onToast, slot }) {
     setState('connecting')
     const accountId = 'kampouse.near'
     const mockRefreshToken = 'mock_refresh_token_zk_cal_demo'
-    await storeCredential(accountId, mockRefreshToken)
+    const ok = await storeCredential(accountId, mockRefreshToken)
+    if (!ok) {
+      // TEE not deployed yet — simulate credential storage for demo
+      console.warn('OutLayer TEE unavailable, using demo mode')
+      setCredStatus('demo')
+      setError(null)
+      onToast('Demo mode — credential simulated (TEE not deployed)')
+    }
     setState('idle')
   }
 
@@ -116,10 +123,11 @@ export default function ProveView({ onToast, slot }) {
               <LockIcon className="w-4 h-4 text-em-400" />
               <span className="text-xs text-gray-400">Google Calendar</span>
               {credStatus === 'stored' && <span className="text-[10px] px-2 py-0.5 rounded-full bg-em-500/15 text-em-400 border border-em-500/20">Connected (TEE)</span>}
+              {credStatus === 'demo' && <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/20">Demo Mode</span>}
               {credStatus === 'none' && <span className="text-[10px] px-2 py-0.5 rounded-full bg-dark-600 text-gray-500 border border-dark-500">Not connected</span>}
               {credStatus === 'checking' && <span className="text-[10px] px-2 py-0.5 rounded-full bg-dark-600 text-gray-500 border border-dark-500 animate-pulse">Checking...</span>}
             </div>
-            {credStatus !== 'stored' && (
+            {credStatus !== 'stored' && credStatus !== 'demo' && (
               <button onClick={connectGoogleCalendar} className="text-xs bg-blue-600 hover:bg-blue-500 transition text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                 <GIcon className="w-3.5 h-3.5" /> Connect
               </button>
@@ -160,7 +168,7 @@ export default function ProveView({ onToast, slot }) {
             {error && <div className="mt-2 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2">{error}</div>}
             <div className="mt-2 text-[10px] text-gray-600 flex items-center gap-1">
               <ShieldIcon className="w-3 h-3" />
-              {credStatus === 'stored' ? 'Refresh token encrypted in TEE — calendar fetched inside enclave' : 'Credential stored inside Intel TDX enclave — never visible to server'}
+              {credStatus === 'stored' ? 'Refresh token encrypted in TEE — calendar fetched inside enclave' : credStatus === 'demo' ? 'Demo mode — simulated credential (deploy WASM to OutLayer for real TEE)' : 'Credential stored inside Intel TDX enclave — never visible to server'}
             </div>
           </div>
 
