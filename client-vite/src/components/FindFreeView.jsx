@@ -63,12 +63,8 @@ function barColor(count, totalMembers) {
 function getBestSlots(availData, yourBusy, totalMembers, threshold) {
   return availData
     .map((count, hour) => ({ hour, count, yourBusy: yourBusy.includes(hour), meetsThreshold: count >= threshold }))
-    .filter(s => s.count > 0)
-    .sort((a, b) => {
-      if (a.meetsThreshold !== b.meetsThreshold) return a.meetsThreshold ? -1 : 1
-      if (a.yourBusy !== b.yourBusy) return a.yourBusy ? 1 : -1
-      return b.count - a.count
-    })
+    .filter(s => s.count > 0 && s.meetsThreshold && !s.yourBusy)
+    .sort((a, b) => b.count - a.count)
     .slice(0, 12)
 }
 
@@ -464,20 +460,17 @@ export default function FindFreeView({ onProve }) {
                   <div className="text-sm text-gray-500 mb-1">Join a group & submit availability</div>
                   <div className="text-[10px] text-gray-600">See when everyone is free — without knowing who</div>
                 </div>
-              ) : (
+              ) : getBestSlots(availData, YOUR_BUSY, totalMembers, threshold).length > 0 ? (
                 <div className="space-y-2">
                   {getBestSlots(availData, YOUR_BUSY, totalMembers, threshold).map((slot, i) => {
                     const colors = countColor(slot.count, totalMembers)
                     return (
                       <div key={i}
-                        className={`rounded-lg p-3 transition ${slot.yourBusy
-                          ? 'bg-dark-700/30 border border-dark-500/30 opacity-60 cursor-default'
-                          : `${colors.bg} border border-dark-500/20 hover:border-dark-500/40 cursor-pointer`
-                        }`}
-                        onClick={() => !slot.yourBusy && handleSlotClick(slot.hour)}>
+                        className={`rounded-lg p-3 transition ${colors.bg} border border-dark-500/20 hover:border-dark-500/40 cursor-pointer`}
+                        onClick={() => handleSlotClick(slot.hour)}>
                         <div className="flex items-center justify-between">
                           <div>
-                            <div className={`text-sm font-medium ${slot.yourBusy ? 'text-gray-500 line-through' : colors.text}`}>
+                            <div className={`text-sm font-medium ${colors.text}`}>
                               {fmtHour12(slot.hour)}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5">
@@ -493,16 +486,13 @@ export default function FindFreeView({ onProve }) {
                             </div>
                           </div>
                           <div className="flex items-center gap-1.5">
-                            {slot.yourBusy && <span className="text-[9px] mono text-rose-500 bg-rose-500/10 px-1.5 py-0.5 rounded">YOUR BUSY</span>}
-                            {!slot.yourBusy && slot.meetsThreshold && slot.count === maxAvail && (
+                            {slot.count === maxAvail && (
                               <span className={`text-[9px] mono ${colors.text} ${colors.bg} px-1.5 py-0.5 rounded`}>★ BEST</span>
                             )}
-                            {!slot.yourBusy && slot.meetsThreshold && (
-                              <button onClick={(e) => { e.stopPropagation(); handleBook(slot.hour, slot.count) }}
-                                className={`text-[9px] font-medium text-white ${colors.btn} px-2 py-0.5 rounded transition flex items-center gap-1`}>
-                                <CalendarIcon className="w-3 h-3" /> Book
-                              </button>
-                            )}
+                            <button onClick={(e) => { e.stopPropagation(); handleBook(slot.hour, slot.count) }}
+                              className={`text-[9px] font-medium text-white ${colors.btn} px-2 py-0.5 rounded transition flex items-center gap-1`}>
+                              <CalendarIcon className="w-3 h-3" /> Book
+                            </button>
                           </div>
                         </div>
                         <div className="mt-2 h-1 rounded-full bg-dark-600 overflow-hidden">
@@ -511,6 +501,12 @@ export default function FindFreeView({ onProve }) {
                       </div>
                     )
                   })}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <CalendarIcon className="w-8 h-8 text-dark-500 mx-auto mb-2" />
+                  <div className="text-xs text-gray-500">No slots meet the quorum of {threshold}/{totalMembers}</div>
+                  <div className="text-[10px] text-gray-600 mt-1">Try lowering the minimum quorum</div>
                 </div>
               )}
             </div>
