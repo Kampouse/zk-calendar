@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import Nav from './components/Nav'
-import CalendarView from './components/CalendarView'
 import FindFreeView from './components/FindFreeView'
 import ProveView from './components/ProveView'
 import VerifyOverlay from './components/VerifyOverlay'
@@ -34,7 +33,7 @@ export default function App() {
         {/* Tabs */}
         <div className="border-b border-dark-600/50 bg-dark-800/50">
           <div className="max-w-7xl mx-auto px-4 flex gap-1">
-            {['calendar', 'find', 'prove'].map(t => (
+            {['find', 'prove'].map(t => (
               <button
                 key={t}
                 onClick={() => setTab(t)}
@@ -43,13 +42,12 @@ export default function App() {
                     ? 'border-em-500 text-em-400'
                     : 'border-transparent text-gray-400 hover:text-white'
                 }`}>
-                {t === 'calendar' ? 'Calendar' : t === 'find' ? 'Groups' : 'Prove'}
+                {t === 'find' ? 'Groups' : 'Prove'}
               </button>
             ))}
           </div>
         </div>
 
-        {tab === 'calendar' && <CalendarView onProve={handleProve} />}
         {tab === 'find' && <FindFreeView onProve={handleProve} />}
         {tab === 'prove' && <ProveView onToast={addToast} slot={proveSlot} />}
       </div>

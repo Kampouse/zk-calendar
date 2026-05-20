@@ -382,9 +382,11 @@ export default function FindFreeView({ onProve }) {
               <div className="bg-dark-700/30 rounded-lg p-3 border border-em-500/10">
                 <div className="text-[10px] uppercase tracking-wider text-em-600 mb-1.5">🛡 Zero-Knowledge Guarantee</div>
                 <ul className="space-y-1 text-xs text-gray-400">
-                  <li className="flex items-center gap-1.5"><span className="text-em-600">✕</span> No member identities revealed</li>
-                  <li className="flex items-center gap-1.5"><span className="text-em-600">✕</span> No calendar contents exposed</li>
-                  <li className="flex items-center gap-1.5"><span className="text-em-600">✕</span> Only aggregate counts shown</li>
+                  <li className="flex items-center gap-1.5"><span className="text-em-500">✓</span> Event titles never leave your device</li>
+                  <li className="flex items-center gap-1.5"><span className="text-em-500">✓</span> Only "free/busy" state is provable</li>
+                  <li className="flex items-center gap-1.5"><span className="text-em-500">✓</span> Groups see counts, not identities</li>
+                  <li className="flex items-center gap-1.5"><span className="text-em-600">✕</span> No one sees your actual calendar</li>
+                  <li className="flex items-center gap-1.5"><span className="text-em-600">✕</span> No server stores your schedule</li>
                 </ul>
               </div>
             </div>
