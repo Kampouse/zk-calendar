@@ -87,6 +87,7 @@ export default function FindFreeView({ onProve }) {
   const [customGroups, setCustomGroups] = useState([])
   const [bookings, setBookings] = useState(MOCK_BOOKINGS)
   const [bookModal, setBookModal] = useState(null) // { hour, count, groupId, groupName, title, duration, note }
+  const [selectedHours, setSelectedHours] = useState(new Set(YOUR_BUSY)) // hours you've marked
 
   const group = [...MOCK_GROUPS, ...customGroups].find(g => g.id === activeGroup)
   const hours = showFullDay ? HOURS_FULL : HOURS_BUSINESS
@@ -138,7 +139,12 @@ export default function FindFreeView({ onProve }) {
 
   function handleSlotClick(hour) {
     if (YOUR_BUSY.includes(hour)) return
-    onProve({ hour, duration: 1, group: group?.name })
+    setSelectedHours(prev => {
+      const next = new Set(prev)
+      if (next.has(hour)) next.delete(hour)
+      else next.add(hour)
+      return next
+    })
   }
 
   function handleBook(hour, count) {
@@ -338,9 +344,15 @@ export default function FindFreeView({ onProve }) {
                   </div>
                 </div>
                 <button onClick={handleSubmitAvailability}
-                  className="w-full bg-em-600 hover:bg-em-500 transition text-white text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2">
-                  <LockIcon className="w-4 h-4" /> Submit ZK Availability
+                  className="w-full bg-em-600 hover:bg-em-500 transition text-white text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                  disabled={selectedHours.size === 0}>
+                  <LockIcon className="w-4 h-4" /> {selectedHours.size > 0 ? `Submit ${selectedHours.size} hour${selectedHours.size > 1 ? 's' : ''}` : 'Select hours to submit'}
                 </button>
+                {selectedHours.size > 0 && (
+                  <div className="text-[10px] text-em-400 text-center mt-1">
+                    {selectedHours.size} hour{selectedHours.size > 1 ? 's' : ''} selected · Click bars to toggle
+                  </div>
+                )}
                 <div className="text-[10px] text-gray-600 text-center mt-2">Proof valid for {PROOF_EXPIRY_HOURS}h · Renewable anytime</div>
               </div>
             )}
@@ -411,17 +423,19 @@ export default function FindFreeView({ onProve }) {
                 {/* Heatmap bars */}
                 <div className="bg-dark-700/50 rounded-lg p-3 mb-3">
                   <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-2">Members available per hour</div>
+                  <div className="text-[9px] text-gray-600 mb-1">Click to mark your free hours</div>
                   <div className="flex gap-px">
                     {hours.map(h => {
                       const count = availData[h] || 0
                       const isYourBusy = YOUR_BUSY.includes(h)
+                      const isSelected = selectedHours.has(h) && !isYourBusy
                       const meetsThreshold = count >= threshold
                       const pct = maxAvail > 0 ? Math.round((count / maxAvail) * 100) : 0
                       const { bg, glow } = heatmapColor(count, totalMembers)
                       return (
                         <div key={h} className="flex-1 flex flex-col items-center gap-0.5 group/slot relative">
-                          <div className={`w-full cursor-pointer rounded-sm transition-all hover:scale-y-110 ${isYourBusy ? 'opacity-40' : ''}`}
-                            style={{ height: `${20 + pct * 0.8}px`, background: bg, boxShadow: glow }}
+                          <div className={`w-full cursor-pointer rounded-sm transition-all hover:scale-y-110 ${isYourBusy ? 'opacity-40' : ''} ${isSelected ? 'ring-2 ring-em-400 ring-offset-1 ring-offset-dark-900' : ''}`}
+                            style={{ height: `${20 + pct * 0.8}px`, background: bg, boxShadow: isSelected ? '0 0 8px rgba(16,185,129,0.5)' : glow }}
                             onClick={() => handleSlotClick(h)}>
                             {count === maxAvail && count > 0 && meetsThreshold && (
                               <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-[7px] mono text-em-400">★</div>
